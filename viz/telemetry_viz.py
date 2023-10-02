@@ -13,24 +13,25 @@ def consume_data(q):
 		print("Starting Kafka consumer")
 
 		consumer = KafkaConsumer('telemetry-out',
-		  bootstrap_servers=["localhost:19092"],
+			bootstrap_servers=["localhost:19092"],
 		)
 
 		print("Listening for messages in output topic")
 
 		for message in consumer:
-		    value = json.loads(message.value)
-		    
-		    print(value['avg'])
 
-        #Post the outgoing spark dataframe in the multiprocessing queue
-		    q.put(value)
+	  	
+			value = json.loads(message.value)	    
+			print(value['avg'])
+
+			#Post the outgoing spark dataframe in the multiprocessing queue
+			q.put(value)
 
 	except KeyboardInterrupt:
-    	print("Consumer Interrupted")
+	 	print("Consumer Interrupted")
 
-  	except (KafkaError, Exception) as e:
-    	print(" Exception ..",e)
+	except (KafkaError, Exception) as e:
+	 	print(" Exception ..",e)
 
 
 if __name__ == '__main__':
